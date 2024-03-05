@@ -1,17 +1,12 @@
-﻿
-using PTMK_TestTask.Domain.Entities;
+﻿using PTMK_TestTask.Domain.Entities;
 using PTMK_TestTask.Domain.Interfaces;
 using System.Diagnostics;
 
 namespace PTMK_TestTask.BuisnessLogic
 {
-    public class EmployeeService : IEmployeeService
+    public class EmployeeService(IEmployeeRepository repository) : IEmployeeService
     {
-        private readonly IEmployeeRepository _employeeRepository;
-        public EmployeeService(IEmployeeRepository employeeRepository)
-        {
-            _employeeRepository = employeeRepository;
-        }
+        private readonly IEmployeeRepository _employeeRepository = repository;
 
         private string[] maleNames =
             {
@@ -28,9 +23,8 @@ namespace PTMK_TestTask.BuisnessLogic
         private string[] maleSecondNames =
         {
             "dubov", "Ivanov", "Makarov", "Mechnikov", "Gorshkov", "Zubarev", "Ulyanov", "Orehov", "Pavlov", "Razumihin", "Karpov", "Kasparov", "Kutuzov", "Molotov", "Alferov",
-            "Gagarin", "Turgenev", "Krasnoperov", "Pushkin", "Bebrov", "Smirnov", "Fedorov", "Fayazov", "Fokin"
+            "Gagarin", "Turgenev", "Krasnoperov", "Pushkin", "Bebrov", "Smirnov", "Fedorov", "Fayazov", "Fokin", "SheVZov"
         };
-
 
         private string[] femaleNames =
         {
@@ -45,7 +39,7 @@ namespace PTMK_TestTask.BuisnessLogic
 
         };
 
-        public void Run(string[] args)
+        public async Task Run(string[] args)
         {
             if (args.Length >= 1)
             {
@@ -54,8 +48,8 @@ namespace PTMK_TestTask.BuisnessLogic
                     case "1":
                         CreateDatabase();
                         Console.WriteLine("Database created!");
-
                         break;
+
                     case "2":
                         if (args.Length < 5)
                         {
@@ -64,8 +58,9 @@ namespace PTMK_TestTask.BuisnessLogic
                             break;
                         }
                         var strings = args.Skip(1).ToList();
-                        AddEmployee(strings);
+                        await AddEmployee(strings);
                         break;
+
                     case "3":
                         var employees = GetOrderedEmployees();
                         foreach( var employee in employees)
@@ -74,9 +69,11 @@ namespace PTMK_TestTask.BuisnessLogic
                         }
                         break;
                     case "4":
+
                         AddRandomEmployees();
                         break;
                     case "5":
+
                         var stopwatch = new Stopwatch();
                         stopwatch.Start();
                         var employees1 = GetAllEmployeesStartLetterF();
@@ -91,15 +88,15 @@ namespace PTMK_TestTask.BuisnessLogic
             }
             else 
             {
-                Console.WriteLine("некорректно введены даные при запуске");
+                Console.WriteLine("Некорректно введены даные при запуске");
             }
         }
 
-        public void AddEmployee(List<string> strings)
+        public async Task AddEmployee(List<string> strings)
         {
             var bdate = DateTime.Parse(strings[4]);
             var employee = CreateEmployee(strings[0], strings[1], strings[2], strings[3], bdate);
-            _employeeRepository.AddEmployee(employee);
+            await _employeeRepository.AddEmployee(employee);
         }
 
         public void AddRandomEmployees()
@@ -125,7 +122,6 @@ namespace PTMK_TestTask.BuisnessLogic
                 var bdate = new DateTime(Random.Shared.Next(1970, 2000), Random.Shared.Next(1, 12), Random.Shared.Next(1, 28));
                 emplist.Add(CreateEmployee(name1, name2, name3, gend, bdate));
             }
-
              _employeeRepository.BulkAddEmployees(emplist);
         }
 
@@ -152,8 +148,6 @@ namespace PTMK_TestTask.BuisnessLogic
         {
             _employeeRepository.CreateDatabase();
         }
-
-
 
         private Employee CreateEmployee(string name1, string name2, string name3, string gend, DateTime Bdate)
         {

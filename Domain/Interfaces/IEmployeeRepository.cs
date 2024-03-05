@@ -5,7 +5,7 @@ namespace PTMK_TestTask.Domain.Interfaces
 {
     public interface IEmployeeRepository
     {
-        void AddEmployee(Employee employee);
+        Task AddEmployee(Employee employee);
         void BulkAddEmployees(List<Employee> eployees);
         void CreateDatabase();
         List<Employee> GetAllEmployees();

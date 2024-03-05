@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "PTMK_TestTask": {
+      "commandName": "Project",
+      "commandLineArgs": ""
+    }
+  }
+}

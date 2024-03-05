@@ -1,5 +1,4 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PTMK_TestTask.BuisnessLogic;
@@ -11,7 +10,7 @@ namespace PTMK_TestTask
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             var host = Host.CreateDefaultBuilder()
                 .ConfigureServices(services =>
@@ -27,7 +26,7 @@ namespace PTMK_TestTask
                 .Build();
 
             var service = ActivatorUtilities.GetServiceOrCreateInstance<IEmployeeService>(host.Services);
-            service.Run(args);
+            await service.Run(args);
         }
     }
 }

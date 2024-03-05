@@ -15,10 +15,10 @@ namespace PTMK_TestTask.Ifrastructure.Repository
             _context = context;
         }
 
-        public void AddEmployee(Employee employee)
+        public async Task AddEmployee(Employee employee)
         {
             _context.Add(employee);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         public void CreateDatabase()

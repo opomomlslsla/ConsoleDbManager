@@ -5,6 +5,7 @@ using PTMK_TestTask.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,6 +22,11 @@ namespace PTMK_TestTask.Ifrastructure
         public void CreateDatabase()
         {
             Database.EnsureCreated();
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Employee>().HasIndex(x => x.SecondName);
         }
     }
 
